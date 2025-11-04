@@ -50,7 +50,10 @@ using namespace std;
  		void Show();
  		void deleteNV(int id) ; // xoa nhan vien
  		void editNV(int id);
- };
+ 		
+ }; 	
+ 
+ // Sua thong tin nhan vien  
  void list::editNV(int id){
  	if(head==NULL)
  	  cout<<"Khong co nhan vien nao!"<<endl;
@@ -115,12 +118,7 @@ using namespace std;
 	}
 }
 }
- 		 
-				 
-			 
-		 
-	 
- 
+ // xuat danh sach		 
  void list::Show(){
  	cout<<"========= DANH SACH NHAN VIEN ========="<<endl; 
  	for(node *i=head;i!=NULL;i=i->next) {
@@ -128,6 +126,7 @@ using namespace std;
 	   }
  	  
  }
+ // tao node nhan vien 
  node* list::createNode(NhanVien v){
  	node *p= new node();
  	p->data=v;
@@ -135,6 +134,7 @@ using namespace std;
  	return p;
  	
  }
+ // them nhan vien 
  void list::addNV(NhanVien v){
  	node *p=createNode(v);
  	if(p==NULL)
@@ -152,26 +152,74 @@ using namespace std;
  int main(){
  	NhanVien a;
  	list b; 
- 	int n; 
- 	cout<<"\nNhap so nhan vien: " ;
- 	cin>>n;
-	 for(int i=0;i<n;i++) {
-	 	a.nhap() ;
-	 	b.addNV(a) ;
+ 	int menu;
+ 	do{ 
+ 	  cout<<"=========== MENU QUAN LY NHAN VIEN ===========" << endl;
+ 	  cout<<"1.Them nhan vien"<<endl;
+ 	  cout<<"2.Hien thi danh sach sinh vien"<<endl;
+ 	  cout<<"3.Sua thong tin nhan vien"<<endl;
+ 	  cout<<"4.Xoa nhan vien"<<endl;
+ 	 
+ 	  cout<<"0.Thoat chuong trinh"<<endl;
+ 	  cout<<"-----------------------"<<endl;
+ 	  cout<<"Xin moi chon phuong thuc:";
+ 	  cin>>menu;
+ 	  
+ 	  switch(menu){
+ 	  	case 1:{
+ 	  		int n; 
+ 	        cout<<"\nNhap so nhan vien: " ;
+ 	        cin>>n;
+	        for(int i=0;i<n;i++) {
+	 	      a.nhap() ;
+	 	      b.addNV(a) ;
 	 }
- 	
- 
- 	b.Show();
- 	int c; 
- 	cout<<"\nNhap ID can xoa: " ;
- 	cin>>c; 
- 	b.deleteNV(c);
-	b.Show(); 
-	int d;
-	cout<<"\nNhap ID NV can sua thong tin:"<<endl;
-	cin>>d;
-	b.editNV(d);
-	b.Show();
-	  
+			break;
+		   }
+		case 2:{
+			b.Show();
+			break;
+		}
+		case 3:{
+			int d;
+	        cout<<"\nNhap ID NV can sua thong tin:"<<endl;
+	        cin>>d;
+ 	        b.editNV(d);
+			break;
+		}
+		case 4:{
+			int c; 
+ 	        cout<<"\nNhap ID can xoa: " ;
+ 	        cin>>c; 
+ 	        b.deleteNV(c);
+			break;
+		}
+		case 0:{
+			cout<<"Thoat chuong trinh"<<endl;
+			break;
+		}
+		default:
+			cout<<"Lua chon khong hop le. Vui long nhap lai"<<endl;
+	   }
+	 }while (menu !=0);
+// 	int n; 
+// 	cout<<"\nNhap so nhan vien: " ;
+// 	cin>>n;
+//	 for(int i=0;i<n;i++) {
+//	 	a.nhap() ;
+//	 	b.addNV(a) ;
+//	 }
+// 	
+// 	b.Show();
+// 	int c; 
+// 	cout<<"\nNhap ID can xoa: " ;
+// 	cin>>c; 
+// 	b.deleteNV(c);
+//	b.Show(); 
+//	int d;
+//	cout<<"\nNhap ID NV can sua thong tin:"<<endl;
+//	cin>>d;
+//	b.editNV(d);
+//	b.Show();
+//	  
  } 
-
