@@ -51,49 +51,53 @@ public:
     NodeNV* tail;
 
     ListNhanVien() : head(NULL), tail(NULL) {}
+    ~ListNhanVien();
 
-    ~ListNhanVien() {
-        NodeNV* current = head;
-        while (current != NULL) {
-            NodeNV* next = current->next;
-            delete current;
-            current = next;
-        }
-        head = tail = NULL;
-    }
-
-    void addNV(NhanVien nv) {
-        nv.tinhLuong();
-        NodeNV* p = new NodeNV{nv, NULL};
-        if (head == NULL) {
-            head = tail = p;
-        } else {
-            tail->next = p;
-            tail = p;
-        }
-    }
-
-    void show() const {
-        if (head == NULL) {
-            cout << "Chua co du lieu nhan vien nao!\n";
-            return;
-        }
-        cout << "\n========= DANH SACH LUONG NHAN VIEN =========" << endl;
-        for (NodeNV* i = head; i != NULL; i = i->next) {
-            i->data.xuat();
-        }
-    }
-    
-    double tinhTongLuong() const {
-        double tong = 0;
-        for (NodeNV* i = head; i != NULL; i = i->next) {
-            tong += i->data.tongLuong;
-        }
-        return tong;
-    }
-    
+    void addNV(NhanVien nv);
+    void show() const;
+    double tinhTongLuong() const;
     bool isEmpty() const { return head == NULL; }
 };
+
+ListNhanVien::~ListNhanVien() {
+    NodeNV* current = head;
+    while (current != NULL) {
+        NodeNV* next = current->next;
+        delete current;
+        current = next;
+    }
+    head = tail = NULL;
+}
+
+void ListNhanVien::addNV(NhanVien nv) {
+    nv.tinhLuong();
+    NodeNV* p = new NodeNV{nv, NULL};
+    if (head == NULL) {
+        head = tail = p;
+    } else {
+        tail->next = p;
+        tail = p;
+    }
+}
+
+void ListNhanVien::show() const {
+    if (head == NULL) {
+        cout << "Chua co du lieu nhan vien nao!\n";
+        return;
+    }
+    cout << "\n========= DANH SACH LUONG NHAN VIEN =========" << endl;
+    for (NodeNV* i = head; i != NULL; i = i->next) {
+        i->data.xuat();
+    }
+}
+
+double ListNhanVien::tinhTongLuong() const {
+    double tong = 0;
+    for (NodeNV* i = head; i != NULL; i = i->next) {
+        tong += i->data.tongLuong;
+    }
+    return tong;
+}
 
 struct DoanhThuNgay {
     string ngayThang;
@@ -134,57 +138,59 @@ public:
     NodeDT* tail;
     
     ListDoanhThu() : head(NULL), tail(NULL) {}
+    ~ListDoanhThu();
 
-    ~ListDoanhThu() {
-        NodeDT* current = head;
-        while (current != NULL) {
-            NodeDT* next = current->next;
-            delete current;
-            current = next;
-        }
-        head = tail = NULL;
-    }
-
-    void addDT(DoanhThuNgay dt) {
-        dt.tinhDoanhThu();
-        NodeDT* p = new NodeDT{dt, NULL};
-        if (head == NULL) {
-            head = tail = p;
-        } else {
-            tail->next = p;
-            tail = p;
-        }
-    }
-
-    void show() const {
-        if (head == NULL) {
-            cout << "Chua co du lieu doanh thu thang nao!\n";
-            return;
-        }
-        cout << "\n====== CHI TIET DOANH THU THEO THANG ======\n";
-        cout << setw(10) << "THANG" << setw(20) << "SO VE BAN RA" << setw(25) << "DOANH THU\n";
-        cout << string(55, '-') << endl;
-        for (NodeDT* i = head; i != NULL; i = i->next) {
-            i->data.xuat();
-        }
-        cout << string(55, '-') << endl;
-    }
-
-    double tinhTongDoanhThu() const {
-        double tong = 0;
-        for (NodeDT* i = head; i != NULL; i = i->next) {
-            tong += i->data.doanhThu;
-        }
-        return tong;
-    }
-
+    void addDT(DoanhThuNgay dt);
+    void show() const;
+    double tinhTongDoanhThu() const;
     bool isEmpty() const { return head == NULL; }
 };
 
+ListDoanhThu::~ListDoanhThu() {
+    NodeDT* current = head;
+    while (current != NULL) {
+        NodeDT* next = current->next;
+        delete current;
+        current = next;
+    }
+    head = tail = NULL;
+}
+
+void ListDoanhThu::addDT(DoanhThuNgay dt) {
+    dt.tinhDoanhThu();
+    NodeDT* p = new NodeDT{dt, NULL};
+    if (head == NULL) {
+        head = tail = p;
+    } else {
+        tail->next = p;
+        tail = p;
+    }
+}
+
+void ListDoanhThu::show() const {
+    if (head == NULL) {
+        cout << "Chua co du lieu doanh thu thang nao!\n";
+        return;
+    }
+    cout << "\n====== CHI TIET DOANH THU THEO THANG ======\n";
+    cout << setw(10) << "THANG" << setw(20) << "SO VE BAN RA" << setw(25) << "DOANH THU\n";
+    cout << string(55, '-') << endl;
+    for (NodeDT* i = head; i != NULL; i = i->next) {
+        i->data.xuat();
+    }
+    cout << string(55, '-') << endl;
+}
+
+double ListDoanhThu::tinhTongDoanhThu() const {
+    double tong = 0;
+    for (NodeDT* i = head; i != NULL; i = i->next) {
+        tong += i->data.doanhThu;
+    }
+    return tong;
+}
 
 class QuanLyHeThong {
 public:
-
     ListNhanVien dsNhanVien;
     ListDoanhThu dsDoanhThu; 
     
@@ -250,7 +256,7 @@ void QuanLyHeThong::xuatBaoCao() {
     
     cout << "\n";
     cout << "============================================\n";
-    cout << "      BAO CAO TONG QUAN RAP PHIM          \n";
+    cout << "      BAO CAO TONG QUAN RAP PHIM            \n";
     cout << "============================================\n";
     cout << fixed << setprecision(0);
     
