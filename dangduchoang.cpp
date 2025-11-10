@@ -2,14 +2,26 @@
 //1.them,xoa (ten phim, the loai, thoi luong)
 //2.Tao lich danh sach chieu(sap xep phim vao cac phong, thoi gian chieu)
 #include<iostream>
+#include<iomanip>
 using namespace std;
 class Film{
 public:
-    string tenPhim,theLoai,lichChieu,gioChieu;
+    string tenPhim,theLoai;
     int thoiLuong,phong;
+    string suatChieu[6];
+    double giaVe[6];
+    Film();
     void nhap();
     void xuat();
 };
+Film::Film() {
+    tenPhim = theLoai = "";
+    thoiLuong = phong = 0;
+    for (int i = 0; i < 6; i++) {
+        suatChieu[i] = "";
+        giaVe[i] = 70000;
+    }
+}
 void Film::nhap(){
     cout<<"Nhap ten phim: ";
     getline(cin,tenPhim);
@@ -18,184 +30,139 @@ void Film::nhap(){
     cout<<"Nhap thoi luong: ";
     cin>>thoiLuong;
     cin.ignore();
-    cout<<"Nhap lich chieu: ";
-    getline(cin,lichChieu);
-    cout<<"Nhap gio chieu: ";
-    getline(cin,gioChieu);
     cout<<"Nhap phong chieu: ";
     cin>>phong;
     cin.ignore();
+    cout << "Nhap 6 suat chieu:\n";
+    for (int i = 0; i < 6; i++) {
+        cout << "  Suat " << i + 1 << ": ";
+        getline(cin, suatChieu[i]);
+        cout << "  Gia ve suat " << i + 1 << " (VND): ";
+        cin >> giaVe[i];
+        cin.ignore();
+    }
 }
 void Film::xuat(){
     cout<<"Ten phim: "<<tenPhim<<endl;
     cout<<"The loai: "<<theLoai<<endl;
     cout<<"Thoi luong: "<<thoiLuong<<endl;
-    cout<<"Lich chieu: "<<lichChieu<<endl;
-    cout<<"Gio chieu: "<<gioChieu<<endl;    
     cout<<"Phong chieu: "<<phong<<endl;
 }
-struct node{
+struct NodeFilm {
     Film data;
-    node *next;
+    NodeFilm* next;
 };
-class listFilm{
+class ListFilm {
 public:
-    node *head,*tail;
+    NodeFilm* head;
+    NodeFilm* tail;
     int size;
-    listFilm();
-    node* createNode(Film n); //tao node moi
-    int length(); // kiem tra so luong phim
-    void addFirst(Film n);  //them vao dau danh sach
-    void addLast(Film n); //them vao cuoi danh sach
-    void insertFilm(Film n,int pos); //chen phim vao vi tri pos
-    void xoaDau();  //xoa phim o dau danh sach
-    void xoaCuoi(); //xoa phim o cuoi danh sach
-    void deleteFilm(int pos); //xoa phim o vi tri pos
-    void showList(); //hien thi danh sach phim
+    ListFilm();
+    NodeFilm* createNode(Film n);
+    void addLast(Film n);
+    void deleteFilm(int pos);
+    void showList();
+    int length();
+    Film* getFilmAt(int pos);
 };
-listFilm::listFilm(){
+ListFilm::ListFilm() {
     head = tail = NULL;
-    size=0;
+    size = 0;
 }
-node* listFilm::createNode(Film n){
-    node *p = new node();
+NodeFilm* ListFilm::createNode(Film n) {
+    NodeFilm* p = new NodeFilm();
     p->data = n;
     p->next = NULL;
     return p;
 }
-// Them phim vao dau danh sach
-void listFilm::addFirst(Film n){
-    node *p=createNode(n);
-    if(p==NULL)
-      return;
-    else if(head==NULL){
-        head=tail=p;
-        size+=1;
+void ListFilm::addLast(Film n) {
+    NodeFilm* p = createNode(n);
+    if (!head) head = tail = p;
+    else {
+        tail->next = p;
+        tail = p;
     }
-    else{
-        p->next=head;
-        head=p;
-        size+=1;
-    }
+    size++;
 }
-// Them phim vao cuoi danh sach
-void listFilm::addLast(Film n){
-    node *p=createNode(n);
-    if(p==NULL){
-       return;
-    }
-    else if(head==NULL){
-        head=tail=NULL;
-    }
-    else{
-        tail->next=p;
-        tail=p;
-        size+=1;
-}
-}
-// Chen phim vao vi tri pos
-void listFilm::insertFilm(Film n, int pos){
-    node *p = createNode(n);
-    if(p==NULL)
-        return;
-    else if(head==NULL){
-        head=tail=p;
-        size+=1;;
-    }
-    else if(pos==1)
-        addFirst(n);
-    else if(pos>size)
-        addLast(n);
-    else{
-        int dem=0;
-    node *i,*j;
-    for(i=head;i!=NULL;i=i->next){
-        dem++;
-        if(dem==(pos-1)){
-        break;
-    }
-}
-    j=i->next; //j la node o vi tri pos
-    i->next=p; //chen p vao sau i
-    p->next=j; //noi p voi j
-    size+=1;
-    }
-}
-// Xoa phim o dau danh sach
-void listFilm::xoaDau(){
-    if(head==NULL){
+void ListFilm::deleteFilm(int pos) {
+    if (!head || pos < 1 || pos > size) {
+        cout << "Vi tri khong hop le!" << endl;
         return;
     }
-    else{
-        node *p=head;
-        head=head->next;
+    if (pos == 1) {
+        NodeFilm* p = head;
+        head = head->next;
         delete p;
-        size-=1;
-    }
-}
-// Xoa phim o cuoi danh sach
-void listFilm::xoaCuoi(){
-    if(head==NULL)
-       return;
-    else if(head==tail){
-        delete head;
-        head=tail=NULL;
-        size-=1;
-    }
-    else{
-        for(node *i=head;i!=NULL;i=i->next){
-            if(i->next==tail){
-                delete tail;
-                tail=i;
-                tail->next=NULL;
-                size-=1;
-            }
+        size--;
+        if (!head) {
+        tail = NULL;
+        cout << "Da xoa phim!" << endl;
+        return;
         }
     }
-}
-// Xoa phim o vi tri pos
-void listFilm::deleteFilm(int pos){
-    if(head==NULL)
-       return;
-    else if(pos==1)
-        xoaDau();
-    else if(pos==size)
-        xoaCuoi();
-    else{
-        int dem=0; 
-        node *i,*j;
-        for(i=head;i!=NULL;i=i->next){ 
-            dem++;
-            if(dem==(pos-1)) 
-               break;
-        }
-        j=i->next; //j la node o vi tri pos
-        i->next=j->next; //bo qua j
-        delete j; //    xoa j
-        size-=1;
+    int dem = 1;
+    NodeFilm* i = head;
+    while (i && dem < pos - 1) {
+        i = i->next;
+        dem++;
+    }
+    if (i && i->next) {
+        NodeFilm* j = i->next;
+        i->next = j->next;
+        if (j == tail) tail = i;
+        delete j;
+        size--;
+        cout << "Da xoa phim!" << endl;
     }
 }
-int listFilm::length(){
-    return size;
-}
-void listFilm::showList(){
-    for(node *i=head;i!=NULL;i=i->next){
-        i->data.xuat();
-        cout<<"-----------------"<<endl;
+void ListFilm::showList(){
+    if (!head){
+        cout << "Danh sach phim trong!\n";
+        return;
+    }
+    cout << "\n" << setw(5) << "STT" << setw(20) << "TEN PHIM" 
+         << setw(23) << "THE LOAI" << setw(30) << "PHONG\n";
+    cout << string(85, '-') << endl;
+    int stt = 1;
+    for (NodeFilm* i = head; i != NULL; i = i->next) {
+        cout << setw(3) << stt++ 
+             << setw(15) << i->data.tenPhim
+             << setw(23) << i->data.theLoai 
+             << setw(32) << i->data.phong << endl;
     }
 }
-int main(){
+int ListFilm::length() { 
+    return size; 
+}
+Film* ListFilm::getFilmAt(int pos) {
+    if (pos < 1 || pos > size) return NULL;
+    int dem = 1;
+    for (NodeFilm* i = head; i != NULL; i = i->next) {
+        if (dem == pos) return &i->data;
+        dem++;
+    }
+    return NULL;
+}
+int main() {
+    ListFilm l;
     Film f;
-    listFilm l;
-    f.nhap();
-    l.insertFilm(f,1);
-    f.nhap();
-    l.insertFilm(f,2);
-    f.nhap();
-    l.insertFilm(f,3);
-    f.nhap();
-    l.insertFilm(f,4);
-    l.deleteFilm(4);
+    int n;
+    cout<<"Nhap so luong phim: "<<endl;
+    cin>>n;
+    cin.ignore();
+    for (int i=0;i<n;i++) {
+        cout <<"Nhap phim thu: "<<i+1<<endl;
+        f.nhap();
+        l.addLast(f);
+    }
+    cout <<"\nDanh sach phim vua nhap:\n";
     l.showList();
-    cout<<"So luong phim :"<<l.length();
+    int pos;
+    cout <<"\nNhap vi tri phim muon xoa:\n";
+    cin >> pos;
+    l.deleteFilm(pos);
+    cout << "\nDanh sach phim sau khi xoa:\n";
+    l.showList();
+    cout << "\nSo luong phim hien tai: " << l.length() << endl;
+    return 0;
 }
