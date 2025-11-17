@@ -6,14 +6,12 @@ using namespace std;
 // ================== CONSTANTS ==================
 const double LUONG_THEO_GIO = 30000.0;
 const int GIO_MOT_CA = 6;
-
-
-
 // ================== CLASS NHAN VIEN ==================
 class NhanVien {
 public:
     string hoTen, gioiTinh, viTriWork;
-    int caLam, ID;
+    int caLam;
+    long long ID;
     double tongLuong;
 
     void nhap();
@@ -133,7 +131,7 @@ void ListNhanVien::addNV(NhanVien v) {
         tail->next = p;
         tail = p;
     }
-    cout << " Da them nhan vien thanh cong!\n";
+    cout << "Da them nhan vien thanh cong!\n";
 }
 
 void ListNhanVien::deleteNV(int id) {
@@ -227,11 +225,11 @@ void Film::nhap() {
     getline(cin, theLoai);
     cout << "Nhap thoi luong (phut): ";
     cin >> thoiLuong;
-    cout << "Nhap phong chieu: ";
+    cout << "Nhap phong chieu(1-50): ";
     cin >> phong;
     cin.ignore();
     
-    cout << "Nhap 6 suat chieu:\n";
+    cout << "Nhap 6 suat chieu(VD: 10:00):\n";
     for (int i = 0; i < 6; i++) {
         cout << "  Suat " << i + 1 << ": ";
         getline(cin, suatChieu[i]);
@@ -332,15 +330,15 @@ void ListFilm::showList() {
         cout << "Danh sach phim trong!\n";
         return;
     }
-    cout << "\n" << setw(5) << "STT" << setw(20) << "TEN PHIM" 
-         << setw(23) << "THE LOAI" << setw(30) << "PHONG\n";
-    cout << string(85, '-') << endl;
+    cout << "\n" << left << setw(5) << "STT" << setw(30)<<"TEN PHIM" 
+         << setw(30) << "THE LOAI" << setw(10) << "PHONG"<< endl;
+    cout << string(75, '-') << endl;
     int stt = 1;
     for (NodeFilm* i = head; i != NULL; i = i->next) {
-        cout << setw(3) << stt++ 
-             << setw(15) << i->data.tenPhim
-             << setw(23) << i->data.theLoai 
-             << setw(32) << i->data.phong << endl;
+        cout << left << setw(5) << stt++ 
+             << setw(30) << i->data.tenPhim
+             << setw(30) << i->data.theLoai 
+             << setw(10) << i->data.phong << endl;
     }
 }
 
@@ -458,7 +456,7 @@ void chonDoAn(DoAn*& danhSachDoAn) {
         cout << "3-" << (soLuongCombo + 2) << ". Combo\n";
         cout << "0. Hoan thanh\n";
         cout << "======================\n";
-        cout << "Nhap lua chon: ";
+        cout << "Nhap lua chon(0-6): ";
         
         int luaChon;
         cin >> luaChon;
@@ -484,17 +482,9 @@ void chonDoAn(DoAn*& danhSachDoAn) {
         } else if (luaChon >= 3 && luaChon < 3 + soLuongCombo) {
             int indexCombo = luaChon - 3;
             ComboInfo combo = danhSachCombo[indexCombo];
-            
-            cout << "\nBan da chon: " << combo.tenCombo << "\n";
+            themDoAn(danhSachDoAn, combo.tenCombo, combo.giaCombo, 1);
+            cout << "\nDa them combo: " << combo.tenCombo << "\n";
             cout << "Gia: " << combo.giaCombo << " VND\n";
-            cout << "Xac nhan? (y/n): ";
-            char confirm;
-            cin >> confirm;
-            
-            if (confirm == 'y' || confirm == 'Y') {
-                themDoAn(danhSachDoAn, combo.tenCombo, combo.giaCombo, 1);
-                cout << "Da them combo!\n";
-            }
         } else {
             cout << "Lua chon khong hop le!\n";
         }
@@ -505,18 +495,18 @@ void chonDoAn(DoAn*& danhSachDoAn) {
 void hienThiDoAnDaChon(DoAn* head) {
     if (!head) return;
     
-    cout << "\n===== DO AN & NUOC DA CHON =====\n";
-cout << setw(5) << "Ten" << setw(30) << "SL" 
-         << setw(15) << "Gia\n";
-    cout << string(60, '-') << endl;
+    cout << "\n============== DO AN & NUOC DA CHON ==============\n";
+    cout << setw(30) << "Ten" << setw(10) << "SL" 
+         << setw(15) << "Gia"<< endl;
+    cout << string(50, '-') << endl;
     
     for (DoAn* p = head; p; p = p->next) {
         double thanhTien = p->gia * p->soLuong;
-        cout << setw(5) << p->tenDoAn 
+        cout << setw(30) << p->tenDoAn 
              << setw(10) << p->soLuong
-             << setw(17) << fixed << setprecision(0) << p->gia<< endl;
+             << setw(20) << fixed << setprecision(0) << p->gia<< endl;
     }
-    cout << string(60, '-') << endl;
+    cout << string(50, '-') << endl;
     cout << "TONG TIEN DO AN: " << tinhTongTienDoAn(head) << " VND\n";
 }
 
@@ -592,7 +582,7 @@ double getGiaGhe(string loai, double giaVeCoBan) {
 }
 
 void inSoDo(Ghe* danhSachGhe) {
-    cout << "\n========== SO DO GHE ==========\n";
+    cout << "\n============ SO DO GHE ============\n";
     cout << "[ ] = Trong | [X] = Da dat\n";
     cout << "A-C: Thuong | D-F: VIP | G-H: Couple\n\n";
     cout << "    ";
@@ -650,7 +640,7 @@ void inHoaDon(Ghe* head, Film* phim, int suatChieu, DoAn* doAnHead) {
     cout << string(60, '-') << endl;
     cout << "**VE XEM PHIM**\n";
     cout << setw(10) << "Ghe" << setw(13) << "Loai" 
-         << setw(15) << "Gia\n";
+         << setw(15) << "Gia"<< endl;
     cout << string(60, '-') << endl;
     
     for (Ghe* p = head; p; p = p->next) {
@@ -666,15 +656,15 @@ void inHoaDon(Ghe* head, Film* phim, int suatChieu, DoAn* doAnHead) {
     // Hiển thị đồ ăn nếu có
     if (doAnHead) {
         cout << "\n**DO AN & NUOC UONG**\n";
-        cout << setw(1) << "Ten" << setw(30) << "SL" 
-             << setw(20) << "Thanh tien\n";
+        cout << setw(30) << "Ten" << setw(10) << "SL" 
+             << setw(20) << "Thanh tien"<< endl;
         cout << string(60, '-') << endl;
         
         for (DoAn* p = doAnHead; p; p = p->next) {
             double thanhTien = p->gia * p->soLuong;
-            cout << setw(1) << p->tenDoAn 
-                 << setw(8) << p->soLuong
-                 << setw(15) << thanhTien << endl;
+            cout << setw(30) << p->tenDoAn 
+                 << setw(10) << p->soLuong
+                 << setw(20) << thanhTien << endl;
         }
         
         double tongTienDoAn = tinhTongTienDoAn(doAnHead);
