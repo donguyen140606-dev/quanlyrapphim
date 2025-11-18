@@ -123,7 +123,6 @@ void ListNhanVien::addNV(NhanVien v) {
         return;
     }
     
-    v.tinhLuong();
     NodeNV* p = createNode(v);
     if (head == NULL) {
         head = tail = p;
@@ -1036,6 +1035,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
