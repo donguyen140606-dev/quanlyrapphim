@@ -2,156 +2,199 @@
 #include<string> 
 using namespace std;
  
- class NhanVien{
- 	public:
- 		string hoTen, gioiTinh, vitriWork;
- 		string timeChamCong;
-		 int caLam,ID;
-		 void nhap();
-		 void Xuat(); 
- 		
- };
- void NhanVien::nhap(){
- 	cin.ignore() ;
- 	cout<<"\nNhap Ho Ten: " ;
- 	getline(cin,hoTen) ;
- 	cout<<"\nNhap gioi tinh: " ;
- 	getline(cin,gioiTinh);
- 	cout<<"\nVi Tri Lam Viec: " ;
-	getline(cin,vitriWork) ;
-	cout<<"\nSo ID: " ;
-	cin>> ID; 	
-	cout<<"\nCa lam viec: " ;
-	cin>> caLam;	
-	cout<<"\nThoi gian lam viec: " ;
-	cin>> timeChamCong; 
- }
- void NhanVien::Xuat(){
- 	cout<<"========================================"<<endl;
- 	cout<<"\nHo Ten: "<<hoTen ;
- 	cout<<"\nGioi Tinh: " <<gioiTinh;
-	cout<<"\nVi tri lam viec: " <<vitriWork;
-	cout<<"\nID: " <<ID; 
-	cout<<"\nCa lam: " <<caLam;
-	cout<<"\nThoi gian lam viec: " <<timeChamCong<<endl;
-	cout<<"========================================"<<endl;
-	 }
- 
- typedef struct Node{
- 	NhanVien data;
- 	struct Node *next;
- }node;
- class list{
- 	public:
- 		node *head,*tail;
- 		list();
- 		node *createNode(NhanVien v);
- 		void addNV(NhanVien v); // them nhan vien
- 		void Show();
- 		void deleteNV(int id) ; // xoa nhan vien
- 		void editNV(int id);
- 		
- }; 	
- 
- // Sua thong tin nhan vien  
- void list::editNV(int id){
- 	if(head==NULL)
- 	  cout<<"Khong co nhan vien nao!"<<endl;
- 	else{
- 		int flag=0;
- 		for(node *i=head;i!=NULL;i=i->next){
- 			if(i->data.ID==id){
- 				cout<<"Da tim thay nhan vien"<<endl;
- 				cout<<"Thong tin nhan vien:"<<endl;
- 				i->data.Xuat();
- 				cout<<"----Nhap lai thong tin can sua----:"<<endl;
- 				i->data.nhap();
- 				flag=1;
- 				break;
-			 }
-		  	}
-	 if(flag==0){
-	  cout<<"Khong co nhan vien nao hop le!"<<endl;
-	  cout<<"Xin nhap lai ID: ";
-	  int b;
-	  cin>>b;
-	  editNV(b);
+ class NhanVien {
+public:
+    string hoTen, gioiTinh, viTriWork;
+    int caLam;
+    long long ID;
+    double tongLuong;
+
+    void nhap();
+    void tinhLuong();
+    void xuat();
+};
+
+// Định nghĩa hàm NhanVien bên ngoài class
+void NhanVien::nhap() {
+    cin.ignore();
+    cout << "\nNhap Ho Ten: ";
+    getline(cin, hoTen);
+    cout << "Nhap gioi tinh: ";
+    getline(cin, gioiTinh);
+    cout << "Vi tri lam viec: ";
+    getline(cin, viTriWork);
+    
+    // Nhập ID 
+    do {
+        cout << "So ID (so nguyen duong): ";
+        cin >> ID;
+        if (cin.fail() || ID <= 0) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "ID khong hop le! Vui long nhap lai.\n";
+        } else {
+            break;
+        }
+    } while (true);
+    
+    // Nhập số ca làm 
+    do {
+        cout << "So ca lam viec trong thang: ";
+        cin >> caLam;
+        if (cin.fail() || caLam < 0) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "So ca khong hop le! Vui long nhap lai.\n";
+        } else {
+            break;
+        }
+    } while (true);
+    
+    tinhLuong();
 }
- }
+
+void NhanVien::tinhLuong() {
+    int soGioLam = caLam * GIO_MOT_CA;
+    tongLuong = soGioLam * LUONG_THEO_GIO;
 }
- 
- 
- list::list(){ // Ham khoi tao
- 	head=tail=NULL;
- }
- void list::deleteNV(int id) {   // xoa nhan vien
- 	if(head==NULL) 
- 	  cout<<"\nKhong Co Nhan Vien Nao" ;
- 	else if(head->data.ID==id) {
- 		node *p=head;
-		head=head->next; 
-		delete p;
-		cout<<"\nDa xoa nhan vien thanh cong" ;
-	 }
-	else {
-		int flag=0; 
-		node *j=head;
-		node *i=head->next ;
-		for(i=head->next;i!=NULL;i=i->next) {
-			if(i->data.ID==id) {
-				j->next = i->next;
-				delete i;
-				cout<<"\nDa xoa nhan vien thanh cong"<<endl ;
-				flag=1; 
-				break; 
-			}
-			else {
-				j=i; 
-			}				 					 			
-		}
-		if(flag==0)	{
-	     cout<<"\nKhong tim thay ID "<<endl;
-		 cout<<"Xin nhap lai ID: ";
-		 int newid;
-		 cin>>newid;
-		 deleteNV(newid);			
-	}
+
+void NhanVien::xuat() {
+    cout << "========================================" << endl;
+    cout << "Ho Ten          : " << hoTen << endl;
+    cout << "Gioi Tinh       : " << gioiTinh << endl;
+    cout << "Vi tri          : " << viTriWork << endl;
+    cout << "ID              : " << ID << endl;
+    cout << "So ca lam       : " << caLam << endl;
+    cout << "Tong luong      : " << fixed << setprecision(0) << tongLuong << " VND" << endl;
+    cout << "========================================" << endl;
 }
+
+// ================== DANH SACH NHAN VIEN ==================
+struct NodeNV {
+    NhanVien data;
+    NodeNV* next;
+};
+
+class ListNhanVien {
+public:
+    NodeNV* head;
+    NodeNV* tail;
+    
+    ListNhanVien();
+    NodeNV* createNode(NhanVien v);
+    bool kiemTraIDTonTai(int id);
+    void addNV(NhanVien v);
+    void deleteNV(int id);
+    void editNV(int id);
+    void show();
+    double tinhTongLuong();
+};
+
+// Định nghĩa hàm ListNhanVien bên ngoài class
+ListNhanVien::ListNhanVien() { 
+    head = tail = NULL; 
 }
- // xuat danh sach		 
- void list::Show(){
- 	cout<<"========= DANH SACH NHAN VIEN ========="<<endl; 
- 	for(node *i=head;i!=NULL;i=i->next) {
-       i->data.Xuat();	 
-	   }
- 	  
- }
- // tao node nhan vien 
- node* list::createNode(NhanVien v){
- 	node *p= new node();
- 	p->data=v;
- 	p->next=NULL;
- 	return p;
- 	
- }
- // them nhan vien 
- void list::addNV(NhanVien v){
- 	node *p=createNode(v);
- 	if(p==NULL)
- 	   cout<<"\nCap nhat p loi" ;
- 	else if(head==NULL){
- 		head=tail=p;
-	 }
-	else{
-		tail->next=p;
-		tail=p;
-	}
- }
+
+NodeNV* ListNhanVien::createNode(NhanVien v) {
+    NodeNV* p = new NodeNV();
+    p->data = v;
+    p->next = NULL;
+    return p;
+}
+
+bool ListNhanVien::kiemTraIDTonTai(int id) {
+    for (NodeNV* i = head; i != NULL; i = i->next) {
+        if (i->data.ID == id) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void ListNhanVien::addNV(NhanVien v) {
+    // Kiểm tra ID trùng
+    if (kiemTraIDTonTai(v.ID)) {
+        cout << "\n ID " << v.ID << " da ton tai! Vui long nhap ID khac.\n";
+        return;
+    }
+    
+    v.tinhLuong();
+    NodeNV* p = createNode(v);
+    if (head == NULL) {
+        head = tail = p;
+    } else {
+        tail->next = p;
+        tail = p;
+    }
+    cout << "Da them nhan vien thanh cong!\n";
+}
+
+void ListNhanVien::deleteNV(int id) {
+    if (head == NULL) {
+        cout << "\nKhong co nhan vien nao" << endl;
+        return;
+    }
+    
+    if (head->data.ID == id) {
+        NodeNV* p = head;
+        head = head->next;
+        delete p;
+        cout << "\nDa xoa nhan vien thanh cong" << endl;
+        return;
+    }
+    
+    NodeNV* j = head;
+    for (NodeNV* i = head->next; i != NULL; i = i->next) {
+        if (i->data.ID == id) {
+            j->next = i->next;
+            if (i == tail) tail = j;
+            delete i;
+            cout << "\nDa xoa nhan vien thanh cong" << endl;
+            return;
+        }
+        j = i;
+    }
+    cout << "\nKhong tim thay ID" << endl;
+}
+
+void ListNhanVien::editNV(int id) {
+    for (NodeNV* i = head; i != NULL; i = i->next) {
+        if (i->data.ID == id) {
+            cout << "Da tim thay nhan vien:" << endl;
+            i->data.xuat();
+            cout << "\n----Nhap lai thong tin----:" << endl;
+            i->data.nhap();
+            cout << "Cap nhat thanh cong!" << endl;
+            return;
+        }
+    }
+    cout << "Khong tim thay nhan vien!" << endl;
+}
+
+void ListNhanVien::show() {
+    if (!head) {
+        cout << "Danh sach nhan vien trong!" << endl;
+        return;
+    }
+    cout << "\n========= DANH SACH NHAN VIEN =========" << endl;
+    for (NodeNV* i = head; i != NULL; i = i->next) {
+        i->data.xuat();
+    }
+}
+
+double ListNhanVien::tinhTongLuong() {
+    double tong = 0;
+    for (NodeNV* i = head; i != NULL; i = i->next) {
+        tong += i->data.tongLuong;
+    }
+    return tong;
+}
+
  
   
  int main(){
  	NhanVien a;
- 	list b; 
+ 	ListNhanVien b; 
  	int menu;
  	do{ 
  	  cout<<"=========== MENU QUAN LY NHAN VIEN ===========" << endl;
@@ -202,24 +245,6 @@ using namespace std;
 			cout<<"Lua chon khong hop le. Vui long nhap lai"<<endl;
 	   }
 	 }while (menu !=0);
-// 	int n; 
-// 	cout<<"\nNhap so nhan vien: " ;
-// 	cin>>n;
-//	 for(int i=0;i<n;i++) {
-//	 	a.nhap() ;
-//	 	b.addNV(a) ;
-//	 }
-// 	
-// 	b.Show();
-// 	int c; 
-// 	cout<<"\nNhap ID can xoa: " ;
-// 	cin>>c; 
-// 	b.deleteNV(c);
-//	b.Show(); 
-//	int d;
-//	cout<<"\nNhap ID NV can sua thong tin:"<<endl;
-//	cin>>d;
-//	b.editNV(d);
-//	b.Show();
-//	  
- } 
+
+
+
