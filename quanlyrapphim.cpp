@@ -716,108 +716,6 @@ void chonGhe(Ghe*& danhSachGhe, double giaVeCoBan, DoAn*& danhSachDoAn) {
     }
 }
 
-// ================== CLASS QUAN LY DOANH THU ==================
-class QuanLyDoanhThu {
-public:
-    double tongDoanhThuVe;
-    double tongDoanhThuDoAn;
-    double tongDoanhThu;
-    int tongSoVe;
-    double tongChiPhiNhanVien;
-    double loiNhuan;
-    
-    QuanLyDoanhThu();
-    void tinhToanDoanhThu(Ghe* ghePhim[50][6], DoAn* doAnPhim[50][6], int soPhim);
-    void tinhToanChiPhi(ListNhanVien& dsNV);
-    void tinhLoiNhuan();
-    void xuatBaoCao();
-};
-
-// Định nghĩa hàm QuanLyDoanhThu bên ngoài class
-QuanLyDoanhThu::QuanLyDoanhThu() {
-    tongDoanhThuVe = 0;
-    tongDoanhThuDoAn = 0;
-    tongDoanhThu = 0;
-    tongSoVe = 0;
-    tongChiPhiNhanVien = 0;
-    loiNhuan = 0;
-}
-
-void QuanLyDoanhThu::tinhToanDoanhThu(Ghe* ghePhim[50][6], DoAn* doAnPhim[50][6], int soPhim) {
-    tongDoanhThuVe = 0;
-    tongDoanhThuDoAn = 0;
-    tongSoVe = 0;
-    
-    for (int i = 1; i <= soPhim; i++) {
-        for (int j = 0; j < 6; j++) {
-            // Tính doanh thu vé
-            if (ghePhim[i][j]) {
-                tongDoanhThuVe += tinhTongTien(ghePhim[i][j]);
-                tongSoVe += demSoVe(ghePhim[i][j]);
-            }
-            
-            // Tính doanh thu đồ ăn
-            if (doAnPhim[i][j]) {
-                tongDoanhThuDoAn += tinhTongTienDoAn(doAnPhim[i][j]);
-            }
-        }
-    }
-    
-    // Tổng doanh thu = Vé + Đồ ăn
-    tongDoanhThu = tongDoanhThuVe + tongDoanhThuDoAn;
-}
-
-void QuanLyDoanhThu::tinhToanChiPhi(ListNhanVien& dsNV) {
-    tongChiPhiNhanVien = dsNV.tinhTongLuong();
-}
-
-void QuanLyDoanhThu::tinhLoiNhuan() {
-    loiNhuan = tongDoanhThu - tongChiPhiNhanVien;
-}
-
-void QuanLyDoanhThu::xuatBaoCao() {
-    cout << "\n";
-    cout << "============================================\n";
-    cout << "        BAO CAO DOANH THU RAP PHIM         \n";
-    cout << "============================================\n";
-    cout << fixed << setprecision(0);
-    
-    cout << "\n**DOANH THU**\n";
-    cout << "Tong so ve da ban: " << tongSoVe << " ve\n";
-    cout << "Doanh thu tu ban ve: " << tongDoanhThuVe << " VND\n";
-    cout << "Doanh thu tu do an: " << tongDoanhThuDoAn << " VND\n";
-    cout << "----------------------------------------\n";
-    cout << "TONG DOANH THU: " << tongDoanhThu << " VND\n";
-    
-    cout << "\n**CHI PHI NHAN SU**\n";
-    cout << "Tong luong nhan vien: " << tongChiPhiNhanVien << " VND\n";
-    
-    cout << "\n**LOI NHUAN**\n";
-    cout << "Loi nhuan = Doanh thu - Chi phi\n";
-    cout << "Loi nhuan = " << tongDoanhThu << " - " << tongChiPhiNhanVien << "\n";
-    cout << "Loi nhuan = " << loiNhuan << " VND\n";
-    
-    if (loiNhuan > 0) {
-        cout << "\n=> Rap dang SINH LOI\n";
-        double tyLeLoiNhuan = (loiNhuan / tongDoanhThu) * 100;
-        cout << "   Ty le loi nhuan: " << fixed << setprecision(2) << tyLeLoiNhuan << "%\n";
-    } else if (loiNhuan < 0) {
-        cout << "\n=> Rap dang LO\n";
-    } else {
-        cout << "\n=> Rap HOA VON\n";
-    }
-    
-    // Thống kê tỷ lệ doanh thu
-    if (tongDoanhThu > 0) {
-        double tyLeVe = (tongDoanhThuVe / tongDoanhThu) * 100;
-        double tyLeDoAn = (tongDoanhThuDoAn / tongDoanhThu) * 100;
-        cout << "\n**PHAN TICH DOANH THU**\n";
-        cout << "Ty le doanh thu ve: " << fixed << setprecision(1) << tyLeVe << "%\n";
-        cout << "Ty le doanh thu do an: " << tyLeDoAn << "%\n";
-    }
-    
-    cout << "============================================\n";
-}
 
 // ================== MAIN FUNCTION ==================
 int main() {
@@ -1036,6 +934,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
