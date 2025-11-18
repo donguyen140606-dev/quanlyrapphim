@@ -166,3 +166,4 @@ int main() {
     cout << "\nSo luong phim hien tai: " << l.length() << endl;
     return 0;
 }
+
