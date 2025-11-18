@@ -163,8 +163,9 @@ int main() {
     l.deleteFilm(pos);
     cout << "\nDanh sach phim sau khi xoa:\n";
     l.showList();
-    cout << "\nSo luong phim hien tai: " << l.length() << endl;
+    cout << "\nSo luong phim hien tai: " << l.length() << endl
     return 0;
 }
+
 
 
