@@ -221,6 +221,86 @@ ListFilm::ListFilm() {
     head = tail = NULL;
     size = 0;
 }
+NodeFilm* ListFilm::createNode(Film n) {
+    NodeFilm* p = new NodeFilm();
+    p->data = n;
+    p->next = NULL;
+    return p;
+}
+
+void ListFilm::addLast(Film n) {
+    NodeFilm* p = createNode(n);
+    if (!head) head = tail = p;
+    else {
+        tail->next = p;
+        tail = p;
+    }
+    size++;
+}
+
+void ListFilm::deleteFilm(int pos) {
+    if (!head || pos < 1 || pos > size) {
+        cout << "Vi tri khong hop le!" << endl;
+        return;
+    }
+    
+    if (pos == 1) {
+        NodeFilm* p = head;
+        head = head->next;
+        delete p;
+        size--;
+        if (!head) tail = NULL;
+        cout << "Da xoa phim!" << endl;
+        return;
+    }
+    
+    int dem = 1;
+    NodeFilm* i = head;
+    while (i && dem < pos - 1) {
+        i = i->next;
+        dem++;
+    }
+    
+    if (i && i->next) {
+        NodeFilm* j = i->next;
+        i->next = j->next;
+        if (j == tail) tail = i;
+        delete j;
+        size--;
+        cout << "Da xoa phim!" << endl;
+    }
+}
+
+void ListFilm::showList() {
+    if (!head) {
+        cout << "Danh sach phim trong!\n";
+        return;
+    }
+    cout << "\n" << setw(5) << "STT" << setw(20) << "TEN PHIM" 
+         << setw(23) << "THE LOAI" << setw(30) << "PHONG\n";
+    cout << string(85, '-') << endl;
+    int stt = 1;
+    for (NodeFilm* i = head; i != NULL; i = i->next) {
+        cout << setw(3) << stt++ 
+             << setw(15) << i->data.tenPhim
+             << setw(23) << i->data.theLoai 
+             << setw(32) << i->data.phong << endl;
+    }
+}
+
+int ListFilm::length() { 
+    return size; 
+}
+
+Film* ListFilm::getFilmAt(int pos) {
+    if (pos < 1 || pos > size) return NULL;
+    int dem = 1;
+    for (NodeFilm* i = head; i != NULL; i = i->next) {
+        if (dem == pos) return &i->data;
+        dem++;
+    }
+    return NULL;
+}
 
 
 
@@ -956,5 +1036,6 @@ int main() {
     return 0;
 
 }
+
 
 
