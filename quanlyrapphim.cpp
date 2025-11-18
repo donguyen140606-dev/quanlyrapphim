@@ -195,33 +195,6 @@ double ListNhanVien::tinhTongLuong() {
 }
 
 // ================== CLASS PHIM ==================
-
-struct NodeFilm {
-    Film data;
-    NodeFilm* next;
-};
-
-class ListFilm {
-public:
-    NodeFilm* head;
-    NodeFilm* tail;
-    int size;
-
-    ListFilm();
-    NodeFilm* createNode(Film n);
-    void addLast(Film n);
-    void deleteFilm(int pos);
-    void showList();
-    int length();
-    Film* getFilmAt(int pos);
-};
-
-// Định nghĩa hàm ListFilm bên ngoài class
-ListFilm::ListFilm() {
-    head = tail = NULL;
-    size = 0;
-}
-
 class Film {
 public:
     string tenPhim, theLoai;
@@ -1114,6 +1087,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
