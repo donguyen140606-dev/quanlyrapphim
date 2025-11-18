@@ -195,6 +195,7 @@ double ListNhanVien::tinhTongLuong() {
 }
 
 // ================== CLASS PHIM ==================
+
 struct NodeFilm {
     Film data;
     NodeFilm* next;
@@ -220,6 +221,86 @@ ListFilm::ListFilm() {
     head = tail = NULL;
     size = 0;
 }
+
+class Film {
+public:
+    string tenPhim, theLoai;
+    int thoiLuong, phong;
+    string suatChieu[6];
+    double giaVe[6];
+
+    Film();
+    void nhap();
+    void xuat();
+};
+
+// Định nghĩa hàm Film bên ngoài class
+Film::Film() {
+    tenPhim = theLoai = "";
+    thoiLuong = phong = 0;
+    for (int i = 0; i < 6; i++) {
+        suatChieu[i] = "";
+        giaVe[i] = 0;
+    }
+}
+
+void Film::nhap() {
+    cout << "Nhap ten phim: ";
+    getline(cin, tenPhim);
+    cout << "Nhap the loai: ";
+    getline(cin, theLoai);
+    cout << "Nhap thoi luong (phut): ";
+    cin >> thoiLuong;
+    cout << "Nhap phong chieu(1-50): ";
+    cin >> phong;
+    cin.ignore();
+    
+    cout << "Nhap 6 suat chieu(VD: 10:00):\n";
+    for (int i = 0; i < 6; i++) {
+        cout << "  Suat " << i + 1 << ": ";
+        getline(cin, suatChieu[i]);
+        cout << "  Gia ve suat " << i + 1 << " (VND): ";
+        cin >> giaVe[i];
+        cin.ignore();
+    }
+}
+
+void Film::xuat() {
+    cout << "\n========================================\n";
+    cout << "TEN PHIM    : " << tenPhim << endl;
+    cout << "THE LOAI    : " << theLoai << endl;
+    cout << "THOI LUONG  : " << thoiLuong << " phut" << endl;
+    cout << "PHONG       : " << phong << endl;
+    cout << "========================================\n";
+}
+
+// ================== DANH SACH PHIM ==================
+struct NodeFilm {
+    Film data;
+    NodeFilm* next;
+};
+
+class ListFilm {
+public:
+    NodeFilm* head;
+    NodeFilm* tail;
+    int size;
+
+    ListFilm();
+    NodeFilm* createNode(Film n);
+    void addLast(Film n);
+    void deleteFilm(int pos);
+    void showList();
+    int length();
+    Film* getFilmAt(int pos);
+};
+
+// Định nghĩa hàm ListFilm bên ngoài class
+ListFilm::ListFilm() {
+    head = tail = NULL;
+    size = 0;
+}
+
 NodeFilm* ListFilm::createNode(Film n) {
     NodeFilm* p = new NodeFilm();
     p->data = n;
@@ -300,8 +381,6 @@ Film* ListFilm::getFilmAt(int pos) {
     }
     return NULL;
 }
-
-
 
 // ================== STRUCT KHACH HANG ==================
 struct KhachHang {
@@ -1035,6 +1114,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
